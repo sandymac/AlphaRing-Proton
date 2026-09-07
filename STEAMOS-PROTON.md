@@ -118,6 +118,28 @@ Seeing `alpha_ring/` appear in your Steam root is proof the DLL loaded and ran a
 
 **Remove `PROTON_LOG=1` (or set `PROTON_LOG=0`) when done.** The log grows to tens of MB per session.
 
+## Known issue: Halo CE freezes on a white or black screen at the end of a level
+
+This is an upstream AlphaRing bug, not a Proton one. It has been reported on Windows and Steam
+Deck since v1.0.69 (WinterSquire/AlphaRing issues #19, #40, #62, #85, #135). The original author's
+release notes for 1.0.85 say: *"H1: Temporarily fix freezing the game after a level is completed.
+Loading screen needs to be closed manually by toggling the menu."* That manual step is still needed.
+
+What it looks like: the mission ends, the screen goes solid white (or black on the next load), audio
+stops, but the AlphaRing menu still opens. The game thread is stuck in the transition while the
+render thread keeps presenting.
+
+Workaround, at the stuck screen:
+
+1. Open and close the AlphaRing menu: **F4**, then **F4** again (or Start + Left-Stick click twice).
+2. If nothing changes, open and close the legacy debug menu: **F1**, then **F1** again.
+3. Give a first-time level load two or three minutes before deciding it is frozen; shader compilation on a fresh
+   Proton prefix can look identical.
+4. Last resort: quit and resume from the campaign save. Progress is kept.
+
+Do not close the console window on Windows; that terminates the game. Under Proton this fork no longer
+opens one.
+
 ## Controllers
 
 - Steam assigns controller order by first input. Press a button on each pad, in player order, at

@@ -134,6 +134,7 @@ void CGameManager::set_state(CGameManager *self, eState state) {
     auto state_name = "Unknown";
     if (state == Exiting)
         state_name = "Exiting";
+    LOG_INFO("set_state[{}]: {}", (int)state, state_name);
     return ppOriginal.set_state(self, state);
 }
 
@@ -235,19 +236,25 @@ static bool ShouldThrottleApply() {
 }
 
 void *CGameManager::game_restart(CGameManager *self, int type, const char *reason) {
+    LOG_INFO("game_restart[{}]: {} (in_game={})", type, reason ? reason : "NoReason", MCC::IsInGame());
     auto result = ppOriginal.game_restart(self, type, reason);
     if (!ShouldThrottleApply()) {
+        LOG_INFO("game_restart: applying profiles + menu state");
         apply_profiles();
         apply_menu_state_from_bin();
+        LOG_INFO("game_restart: apply done");
     }
     return result;
 }
 
 char __fastcall CGameManager::game_setup(CGameManager* self, void* a2) {
+    LOG_INFO("game_setup (in_game={})", MCC::IsInGame());
     char result = ppOriginal.game_setup(self, a2);
     if (!ShouldThrottleApply()) {
+        LOG_INFO("game_setup: applying profiles + menu state");
         apply_profiles();
         apply_menu_state_from_bin();
+        LOG_INFO("game_setup: apply done");
     }
     return result;
 }

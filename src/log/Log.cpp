@@ -39,8 +39,11 @@ namespace AlphaRing::Log {
             OutputDebugStringA(e.what());
         }
 
-        // Console sink - allocate console for debug visibility
-        console_allocated = AllocConsole();
+        // Console sink - allocate console for debug visibility.
+        // Skipped under Wine/Proton: the file log covers it, a stray console window
+        // in gamescope can steal focus, and closing it kills the game.
+        static const bool under_wine = GetProcAddress(GetModuleHandleA("ntdll.dll"), "wine_get_version") != nullptr;
+        console_allocated = !under_wine && AllocConsole();
         if (console_allocated) {
             freopen("CONIN$", "r", stdin);
             freopen("CONOUT$", "w", stdout);
@@ -60,6 +63,7 @@ namespace AlphaRing::Log {
                 spdlog::register_logger(default_logger);
 
                 LOG_INFO("=== AlphaRing Started ===");
+                if (under_wine) LOG_INFO("Running under Wine/Proton: console window disabled");
                 if (!logPathStr.empty())
                     LOG_INFO("Log file: {}", logPathStr);
                 else

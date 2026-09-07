@@ -12,10 +12,12 @@
 namespace MCC::Module {
     DefDetourFunction(void, __fastcall, module_load, module_info_t* info, int a2, __int64 a3) {
         ppOriginal_module_load(info, a2, a3);
+        LOG_INFO("module_load: title={} hModule={:#x} err={}", info ? info->title : -1, info ? (unsigned long long)info->hModule : 0ull, info ? info->errorCode : -1);
         GetSubModule(info->title)->load_module(info);
     }
 
     DefDetourFunction(__int64, __fastcall, module_unload, module_info_t* info) {
+        LOG_INFO("module_unload: title={}", info ? info->title : -1);
         GetSubModule(info->title)->unload_module();
         return ppOriginal_module_unload(info);
     }
