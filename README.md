@@ -1,3 +1,12 @@
+> **This repository is AlphaRing for use on SteamOS with Proton GE 11-6, to enable Halo: The Master
+> Chief Collection split screen on a Valve Steam Machine.** It is a fork of
+> [megabitt01/AlphaRing](https://github.com/megabitt01/AlphaRing) with one build fix that stops the
+> upstream DLL from crashing at startup under Proton ("Fatal error!"), plus file logging.
+> Prebuilt `WTSAPI32.dll` is on the [Releases](https://github.com/sandymac/AlphaRing-Proton/releases)
+> page. Read **[STEAMOS-PROTON.md](STEAMOS-PROTON.md)** for install steps, the root cause, and debugging.
+
+---
+
 # AlphaRing - thejackbitt fork
 
 >
