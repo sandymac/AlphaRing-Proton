@@ -131,8 +131,11 @@ render thread keeps presenting.
 
 Workaround, at the stuck screen:
 
-1. Open and close the AlphaRing menu: **F4**, then **F4** again (or Start + Left-Stick click twice).
-2. If nothing changes, open and close the legacy debug menu: **F1**, then **F1** again.
+1. Open and close the legacy debug menu: **F1**, then **F1** again (pad: Start + Right-Stick click,
+   twice). This is the menu the original workaround refers to. While it is open the mod answers the
+   game's controller polls with "connected, nothing pressed" for every slot, which is what lets the
+   stuck level setup continue. The F4 Xbox-style menu does not go through that path.
+2. If nothing changes, try **F4** twice as well.
 3. Give a first-time level load two or three minutes before deciding it is frozen; shader compilation on a fresh
    Proton prefix can look identical.
 4. Last resort: quit and resume from the campaign save. Progress is kept.
