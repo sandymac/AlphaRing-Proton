@@ -88,6 +88,7 @@ namespace AlphaRing::Render::ImGui {
     }
 
     void Render() {
+        MCC::OnFrame();
         AlphaRing::Input::Update();
 
         bool xboxOpen = g_pXboxContext && g_pXboxContext->isOpen();

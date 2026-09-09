@@ -8,6 +8,7 @@
 #include "mcc/module/Module.h"
 #include "mcc/network/Network.h"
 #include "mcc/splitscreen/Splitscreen.h"
+#include "global/Global.h"
 
 namespace MCC {
     static bool* bIsInGame;
@@ -19,6 +20,38 @@ namespace MCC {
 
     bool IsInGame() {
         return *bIsInGame;
+    }
+
+    // Halo CE Anniversary builds its projection before the split viewports exist, so every
+    // split-screen view renders vertically squished until the engine reloads its settings,
+    // which is what closing the F4 menu happens to do. Post that reload ourselves shortly after
+    // a level starts rendering. Halo CE + split-screen only; other games do not need it.
+    void OnFrame() {
+        static bool s_was_in_game = false;
+        static int s_frames_in_game = -1; // -1: nothing pending
+
+        if (bIsInGame == nullptr || g_ppGameGlobal == nullptr || g_ppGameEngine == nullptr)
+            return; // Present can fire before MCC::Initialize has resolved these
+
+        bool in_game = IsInGame();
+        if (in_game && !s_was_in_game) s_frames_in_game = 0;   // level just started
+        else if (!in_game) s_frames_in_game = -1;
+        s_was_in_game = in_game;
+
+        if (s_frames_in_game < 0) return;
+        // ponytail: fixed frame count (~3 s at 60 fps) instead of detecting the renderer's own
+        // viewport setup; bump it if the reload lands too early on slow first-time level loads.
+        if (++s_frames_in_game < 180) return;
+        s_frames_in_game = -1;
+
+        auto p_setting = AlphaRing::Global::MCC::Splitscreen();
+        auto gg = GameGlobal();
+        auto engine = GameEngine();
+        if (!p_setting || !p_setting->b_override || p_setting->player_count < 2) return;
+        if (!gg || gg->current_game != CGameGlobal::Halo1 || !engine) return;
+
+        LOG_INFO("Halo1 splitscreen: reloading settings to rebuild the anniversary projection");
+        engine->load_setting();
     }
 
     bool Initialize() {
