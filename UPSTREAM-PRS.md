@@ -12,7 +12,7 @@ Tracked as issues on this fork: https://github.com/sandymac/AlphaRing-Proton/iss
 | 1 | Proton startup crash: build with `_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR` | `CMakeLists.txt` (1 line) | **Verified** on Steam Machine, GE-Proton11-6 | `edd5d8d` (bundled with #2; split before submitting) |
 | 2 | File logging (`alpharing.log`), non-fatal console allocation, null-guarded `LOG_*` | `src/log/Log.cpp`, `src/log/Log.h` | **Verified** | `edd5d8d` |
 | 3 | Do not `AllocConsole` under Wine/Proton | `src/log/Log.cpp` | Verified (no window, game unaffected) | `606b28c` (bundled with #5) |
-| 4 | Halo CE Anniversary aspect: post a settings reload ~3 s after a split-screen level starts (issue #4) | `src/mcc/mcc.cpp`, `src/mcc/mcc.h`, `src/render/imgui/ImGui.cpp` | Built, **awaiting test**; covers level-start only, **not cutscene transitions** | `27cd5a8` |
+| 4 | Halo CE Anniversary aspect: post a settings reload ~3 s after a split-screen level starts (issue #4) | `src/mcc/mcc.cpp`, `src/mcc/mcc.h`, `src/render/imgui/ImGui.cpp` | **Level-start verified** on Steam Machine (correct aspect, no F4); cutscene transitions still uncovered | `27cd5a8` |
 | 5 | Diagnostic logging of `module_load/unload`, `game_setup`, `game_restart`, `set_state` | `src/mcc/CGameManager.cpp`, `src/mcc/module/Module.cpp` | Working; optional for upstream (could go behind a debug level) | `606b28c` |
 | 6 | Linux/SteamOS install and troubleshooting guide | `STEAMOS-PROTON.md` | Docs only | `edd5d8d`, `606b28c`, follow-ups |
 
